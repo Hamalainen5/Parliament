@@ -3,6 +3,7 @@ package com.example.parliament.data
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MemberDao {
@@ -14,5 +15,12 @@ interface MemberDao {
     suspend fun insertMembers(members: List<Member>)
 
     @Query("SELECT * FROM members")
-    suspend fun getAllMembers(): List<Member>
+    fun getAllMembers(): Flow<List<Member>>
+
+    @Query("""
+        SELECT * FROM members
+        WHERE party = :party
+        ORDER BY lastname, firstname
+    """)
+    fun getMembersByParty(party: String): Flow<List<Member>>
 }

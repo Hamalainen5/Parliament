@@ -6,13 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Member::class],
-    version = 1,
+    entities = [Member::class, Party::class],
+    version = 2,
     exportSchema = false
 )
 abstract class ParliamentDatabase : RoomDatabase() {
 
     abstract fun memberDao(): MemberDao
+    abstract fun partyDao(): PartyDao
 
     companion object {
         @Volatile

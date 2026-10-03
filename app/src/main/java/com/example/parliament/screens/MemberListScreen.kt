@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import coil.compose.AsyncImage
 @Composable
 fun MemberListScreen(
     members: List<Member>,
@@ -34,6 +35,22 @@ fun MemberListScreen(
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
+                    AsyncImage(
+                        model = "https://users.metropolia.fi/~peterh/${member.pictureUrl}",
+                        contentDescription = "${member.firstname} ${member.lastname}",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp),
+                        onLoading = {
+                            println("Loading image: ${member.pictureUrl}")
+                        },
+                        onSuccess = {
+                            println("Image loaded: ${member.pictureUrl}")
+                        },
+                        onError = {
+                            println("Image failed: ${member.pictureUrl}")
+                        }
+                    )
                     Text(
                         text = "${member.firstname} ${member.lastname}",
                         style = MaterialTheme.typography.titleMedium
