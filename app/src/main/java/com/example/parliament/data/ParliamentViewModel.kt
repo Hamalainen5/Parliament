@@ -12,9 +12,13 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
-class MemberViewModel(
+class ParliamentViewModel(
     private val repository: MemberRepository
 ) : ViewModel() {
+
+    val isLoading = MutableStateFlow(false)
+
+    val errorMessage = MutableStateFlow<String?>(null)
 
     private val selectedParty = MutableStateFlow<String?>(null)
 
@@ -27,14 +31,6 @@ class MemberViewModel(
                     repository.getMembersByParty(party)
                 }
             }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = emptyList()
-            )
-
-    val members: StateFlow<List<Member>> =
-        repository.getMembers()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -99,22 +95,24 @@ class MemberViewModel(
     private fun refreshMembers() {
         viewModelScope.launch {
             try {
+                errorMessage.value = null
                 repository.refreshMembers()
             } catch (e: Exception) {
                 e.printStackTrace()
+                errorMessage.value = "Could not refresh parliament data"
             }
         }
     }
 }
 
-class MemberViewModelFactory(
+class ParliamentViewModelFactory(
     private val repository: MemberRepository
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MemberViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(ParliamentViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return MemberViewModel(repository) as T
+            return ParliamentViewModel(repository) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

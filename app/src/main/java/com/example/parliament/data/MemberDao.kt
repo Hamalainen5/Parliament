@@ -14,9 +14,6 @@ interface MemberDao {
     @Insert
     suspend fun insertMembers(members: List<Member>)
 
-    @Query("SELECT * FROM members")
-    fun getAllMembers(): Flow<List<Member>>
-
     @Query("""
         SELECT * FROM members
         WHERE party = :party

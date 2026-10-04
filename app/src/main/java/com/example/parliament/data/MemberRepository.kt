@@ -4,36 +4,31 @@ import kotlinx.coroutines.flow.Flow
 
 class MemberRepository(
     private val api: ParliamentApi,
-    private val memberDao: MemberDao,
-    private val partyDao: PartyDao
+    private val database: ParliamentDatabase
 ) {
 
     suspend fun refreshMembers() {
         val members = api.getMembers()
 
-        memberDao.deleteAllMembers()
-        memberDao.insertMembers(members)
-
         val parties = members
             .map { member -> Party(code = member.party) }
             .distinctBy { party -> party.code }
 
-        partyDao.insertParties(parties)
-    }
-
-    fun getMembers(): Flow<List<Member>> {
-        return memberDao.getAllMembers()
+        database.refreshData(
+            members = members,
+            parties = parties
+        )
     }
 
     fun getMembersByParty(party: String): Flow<List<Member>> {
-        return memberDao.getMembersByParty(party)
+        return database.memberDao().getMembersByParty(party)
     }
 
     fun getPartiesWithMemberCount(): Flow<List<PartyWithMemberCount>> {
-        return partyDao.getPartiesWithMemberCount()
+        return database.partyDao().getPartiesWithMemberCount()
     }
 
     suspend fun setFavorite(code: String, favorite: Boolean) {
-        partyDao.setFavorite(code, favorite)
+        database.partyDao().setFavorite(code, favorite)
     }
 }

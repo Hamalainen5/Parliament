@@ -14,9 +14,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.parliament.data.Member
-import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun MemberPartyScreen(
     party: String,
     members: List<Member>,
@@ -26,17 +32,26 @@ fun MemberPartyScreen(
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        Button(
-            onClick = onBack,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text("Back")
-        }
+        TopAppBar(
+            title = {
+                Text(text = "${party.uppercase()} Members")
+            },
+            navigationIcon = {
+                IconButton(
+                    onClick = onBack
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+            }
+        )
 
         Text(
-            text = party.uppercase(),
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            text = "${members.size} members",
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
 
         LazyColumn(

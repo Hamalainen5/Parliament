@@ -18,6 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.parliament.data.PartyWithMemberCount
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Surface
 
 @Composable
 fun PartyListScreen(
@@ -36,6 +39,14 @@ fun PartyListScreen(
     ) {
         item {
             Text(
+                text = "Parliament Parties",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+
+        item {
+            Text(
                 text = "Favorite party members: $favoriteMemberCount",
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -43,15 +54,23 @@ fun PartyListScreen(
         }
 
         item {
-            Text(
-                text = if (hasMajority) {
-                    "Majority government possible"
-                } else {
-                    "Majority government not possible"
-                },
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                tonalElevation = 2.dp,
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text(
+                    text = if (hasMajority) {
+                        "Majority government possible"
+                    } else {
+                        "Majority government not possible"
+                    },
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
         }
 
         items(parties) { party ->
@@ -70,6 +89,10 @@ fun PartyListScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
+                    PartyLogo(partyCode = party.code)
+
+                    Spacer(modifier = Modifier.width(12.dp))
+
                     Column(
                         modifier = Modifier
                             .weight(1f)
@@ -85,12 +108,21 @@ fun PartyListScreen(
                         )
                     }
 
-                    Checkbox(
-                        checked = party.favorite,
-                        onCheckedChange = { checked ->
-                            onFavoriteChanged(party.code, checked)
-                        }
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Favorite",
+                            style = MaterialTheme.typography.labelSmall
+                        )
+
+                        Checkbox(
+                            checked = party.favorite,
+                            onCheckedChange = { checked ->
+                                onFavoriteChanged(party.code, checked)
+                            }
+                        )
+                    }
                 }
             }
         }

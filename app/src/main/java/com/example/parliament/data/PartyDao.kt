@@ -9,12 +9,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PartyDao {
 
-    @Query("SELECT * FROM parties ORDER BY code")
-    fun getAllParties(): Flow<List<Party>>
-
-    @Query("SELECT * FROM parties WHERE favorite = 1")
-    fun getFavoriteParties(): Flow<List<Party>>
-
     @Query("UPDATE parties SET favorite = :favorite WHERE code = :code")
     suspend fun setFavorite(code: String, favorite: Boolean)
 

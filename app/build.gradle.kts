@@ -49,11 +49,11 @@ dependencies {
     implementation("com.google.code.gson:gson:2.13.2")
     implementation("androidx.room:room-runtime:2.8.2")
     implementation("androidx.room:room-ktx:2.8.2")
+    implementation(libs.androidx.material3)
     ksp("androidx.room:room-compiler:2.8.2")
-
+    implementation("androidx.compose.material:material-icons-extended")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.11.0")
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
